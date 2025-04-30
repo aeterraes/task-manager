@@ -1,13 +1,12 @@
 package aeterraes.app.dataaccess.entity;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @Setter
 @Getter
-@RequiredArgsConstructor
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name="Tasks")
 public class Task {
@@ -21,12 +20,6 @@ public class Task {
     @Column(name="description")
     private String description;
 
-    @ManyToOne
-    @JoinColumn(name="user_id")
-    private User user;
-
-    public Task(String title, String description) {
-        this.title = title;
-        this.description = description;
-    }
+    @Column(name="user_id")
+    private int userId;
 }
