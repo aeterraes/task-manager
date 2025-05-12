@@ -21,5 +21,5 @@ public class Task {
     private String description;
 
     @Column(name="user_id")
-    private int userId;
+    private Integer userId;
 }
