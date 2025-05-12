@@ -12,6 +12,28 @@ spring:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
     defer-datasource-initialization: true
+  kafka:
+    bootstrap-servers: localhost:9092
+    consumer:
+      group-id: task-group
+      max-poll-records: 10
+    listener:
+      poll-timeout: 1000
+  mail:
+    host: smtp.yandex.ru
+    port: 465
+    username: ${MAIL}
+    password: ${PASS}
+    protocol: smtps
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls.enable: true
 logging:
   level:
     aeterraes.app.aspect.LogAspect: INFO
+task:
+  kafka:
+    topics:
+      updates: task-updates
