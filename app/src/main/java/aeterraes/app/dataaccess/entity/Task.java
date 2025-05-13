@@ -22,4 +22,7 @@ public class Task {
 
     @Column(name="user_id")
     private Integer userId;
+
+    @Column(name="status")
+    private String status;
 }
