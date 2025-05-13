@@ -24,12 +24,15 @@ spring:
     port: 465
     username: ${MAIL}
     password: ${PASS}
-    protocol: smtps
+    protocol: smtp
     properties:
       mail:
         smtp:
           auth: true
-          starttls.enable: true
+          ssl:
+            enable: true
+          starttls.enable: false
+        debug: true
 logging:
   level:
     aeterraes.app.aspect.LogAspect: INFO
