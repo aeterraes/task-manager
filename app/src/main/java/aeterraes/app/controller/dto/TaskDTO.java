@@ -7,4 +7,5 @@ public class TaskDTO {
     String title;
     String description;
     int userId;
+    private String status;
 }

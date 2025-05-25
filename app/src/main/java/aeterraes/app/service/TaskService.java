@@ -6,6 +6,7 @@ import aeterraes.app.aspect.annotation.Loggable;
 import aeterraes.app.aspect.annotation.ResultHandling;
 import aeterraes.app.dataaccess.entity.Task;
 import aeterraes.app.dataaccess.repository.TaskRepository;
+import aeterraes.app.kafka.TaskEventProducer;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
@@ -20,6 +21,7 @@ import java.util.List;
 public class TaskService {
 
     private final TaskRepository taskRepository;
+    private final TaskEventProducer taskEventProducer;
 
     @Loggable
     @ExceptionHandling
@@ -58,6 +60,10 @@ public class TaskService {
                     currentTask.setTitle(task.getTitle());
                     currentTask.setDescription(task.getDescription());
                     currentTask.setUserId(task.getUserId());
+                    if (!currentTask.getStatus().equals(task.getStatus())) {
+                        taskEventProducer.sendTaskStatusUpdate(id, task.getStatus());
+                    }
+                    currentTask.setStatus(task.getStatus());
                     return taskRepository.save(currentTask);
                 }).orElseThrow();
     }
