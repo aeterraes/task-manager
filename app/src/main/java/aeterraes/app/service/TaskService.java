@@ -13,7 +13,6 @@ import lombok.Setter;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Setter
 @Getter
@@ -34,8 +33,8 @@ public class TaskService {
     @Loggable
     @ExceptionHandling
     @LogTimeTracking
-    public Optional<Task> getTaskById(int id) {
-        return taskRepository.findById(id);
+    public Task getTaskById(int id) {
+        return taskRepository.findById(id).orElseThrow();
     }
 
     @Loggable
@@ -55,7 +54,7 @@ public class TaskService {
     @ExceptionHandling
     @ResultHandling
     @LogTimeTracking
-    public Optional<Task> updateTask(int id, Task task) {
+    public Task updateTask(int id, Task task) {
         return taskRepository.findById(id)
                 .map(currentTask -> {
                     currentTask.setTitle(task.getTitle());
@@ -66,6 +65,6 @@ public class TaskService {
                     }
                     currentTask.setStatus(task.getStatus());
                     return taskRepository.save(currentTask);
-                });
+                }).orElseThrow();
     }
 }
