@@ -5,7 +5,9 @@ import aeterraes.app.dataaccess.entity.Task;
 import aeterraes.app.service.TaskService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -20,7 +22,12 @@ public class TaskController {
 
     @GetMapping("/{id}")
     public TaskDTO getTaskById(@PathVariable int id) {
-        return modelMapper.map(taskService.getTaskById(id), TaskDTO.class);
+        Task task = taskService.getTaskById(id)
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND,
+                        String.format("Task with id %d not found", id)
+                ));
+        return modelMapper.map(task, TaskDTO.class);
     }
 
     @GetMapping
@@ -37,10 +44,12 @@ public class TaskController {
 
     @PutMapping("/{id}")
     public TaskDTO updateTask(@PathVariable int id, @RequestBody TaskDTO taskDTO) {
-        return modelMapper.map(
-                taskService.updateTask(
-                        id, modelMapper.map(taskDTO, Task.class)),
-                TaskDTO.class);
+        Task updatedTask = taskService.updateTask(id, modelMapper.map(taskDTO, Task.class))
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND,
+                        String.format("Task with id %d not found", id)
+                ));
+        return modelMapper.map(updatedTask, TaskDTO.class);
     }
 
     @DeleteMapping("/{id}")
